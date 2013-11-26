@@ -7,8 +7,15 @@ lib-cov
 *.pid
 *.gz
 
+.idea/workspace.xml
+.idea/tasks.xml
 pids
-logs
-results
 
+main.css
 npm-debug.log
+node_modules/
+
+*.js
+!Gruntfile.js
+!public/js/vendor/**/*.js
+!public/js/vendor/*.js

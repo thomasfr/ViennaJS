@@ -1,0 +1,18 @@
+!!!5
+html
+	head
+		meta(charset="utf-8")
+		script(src="/js/vendor/oauth.js")
+		title Foo
+	body
+		h1 Foo
+
+	script
+		OAuth.initialize('qSjmMc2XQ-feT3V3loaR0Cgkq2U');
+		OAuth.popup('meetup', function(error, result) {
+			if (error) {
+				console.log(error); // do something with error
+				return;
+			}
+			console.log(result);
+		});
