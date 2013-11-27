@@ -7,7 +7,7 @@ groupId = "1679721"
 meetupClient = meetup apiKey
 
 
-module.exports.getAllMembers = getAllMembers = (callback) ->
+module.exports.getMembers = getMembers = (callback) ->
 	members = []
 	offset = 0
 	page = 200
@@ -26,6 +26,15 @@ module.exports.getAllMembers = getAllMembers = (callback) ->
 					callback null, members
 	doFetch offset, page
 
+
+module.exports.getGroupInfo = getGroupInfo = (callback) ->
+	meetupClient.getGroups {group_id: groupId}, (error, result) ->
+		if error
+			callback error, null
+		else
+			if result.results && result.results[0]
+				groupInfo = result.results[0] or {}
+				callback null, groupInfo
 
 
 module.exports.getVenues = getVenues = (callback) ->
@@ -92,8 +101,17 @@ module.exports.getRSVPs = getRSVPs = (eventId, callback) ->
 
 
 async.series
+	group: (callback) ->
+		getGroupInfo (error, info) ->
+			if error
+				console.error "error getting group info"
+				callback error, null
+			else
+				console.log "Retrieved group Info for '#{info.name}' (#{info.id})"
+				callback null, info
+
 	members: (callback) ->
-		getAllMembers (error, members) ->
+		getMembers (error, members) ->
 			if error
 				console.error "error getting all members:", error
 				callback error, null
@@ -123,6 +141,7 @@ async.series
 		console.error "Error getting data: ", error
 		throw error
 	else
+		fs.writeFileSync("#{__dirname}/data/group.json", JSON.stringify(results.group), 'utf-8')
 		fs.writeFileSync("#{__dirname}/data/members.json", JSON.stringify(results.members), 'utf-8')
 		fs.writeFileSync("#{__dirname}/data/venues.json", JSON.stringify(results.venues), 'utf-8')
 		fs.writeFileSync("#{__dirname}/data/events.json", JSON.stringify(results.events), 'utf-8')
