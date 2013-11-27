@@ -21,7 +21,6 @@ cities.push
 	country: group.country.toLowerCase()
 
 migrate = () ->
-	###
 	groupNode = wait.for db.query """
 	MERGE (group:Group {
 		id: {id},
@@ -197,7 +196,6 @@ migrate = () ->
 		RETURN venue, city
 		""", venue
 		console.log result
-	###
 	rsvps.forEach (rsvpObject) ->
 		eventIds = Object.keys rsvpObject
 		eventId = eventIds[0]
@@ -207,7 +205,7 @@ migrate = () ->
 			MATCH (event:Event{id:"#{eventId}"}), (user:User{id:#{rsvp.member.member_id}})
 			"""
 			if rsvp.response is "yes"
-				query += " MERGE (user)-[r:attending]->(event)"
+				query += " MERGE (user)-[r:isAttending]->(event)"
 			else if rsvp.response is "no"
 				query += " MERGE (user)-[r:notAttending]->(event)"
 			else if rsvp.response is "maybe"
