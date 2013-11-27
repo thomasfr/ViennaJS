@@ -1,9 +1,10 @@
 meetup = require 'meetup-api'
 async = require 'async'
 fs = require 'fs'
+settings = require "#{__dirname}/config/settings.json"
 
-apiKey = "7e1571e1172177fda43547dc2a4"
-groupId = "1679721"
+apiKey = settings.apiKey
+groupId = settings.groupId
 meetupClient = meetup apiKey
 
 
